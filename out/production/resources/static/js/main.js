@@ -19,7 +19,6 @@ var colors = [
 function connect(event) {
     username = document.querySelector('#name').value.trim();
     if (username) {
-        alert(username);
         usernamePage.classList.add('hidden');
         chatPage.classList.remove('hidden');
         var socket = new SockJS('/ws');
@@ -38,7 +37,7 @@ function onConnected() {
 }
 
 function onError(error) {
-    alert(error.toString());
+    console.log(error.toString());
     connectingElement.textContent = '不能连接到服务器';
     connectingElement.style.color = 'red';
 }
@@ -60,7 +59,6 @@ function sendMessage(event) {
 
 function onMessageReceived(payload) {
     console.log(payload);
-    alert(payload);
     var message = JSON.parse(payload.body);
     updateChatList(message, 'robot');
 }

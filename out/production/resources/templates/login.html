@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>登录 </title>
-  <!--  <link rel="stylesheet" th:href="@{/css/main.css}"
-          href="/css/main.css" />-->
+    <link rel="stylesheet" href="/css/main.css"/>
 </head>
 <body>
 <div th:if="${param.error}">
@@ -12,10 +11,22 @@
 <div th:if="${param.logout}">
     You have been logged out.
 </div>
-<form th:action="@{/login}" method="post">
-    <div><label> User Name : <input type="text" name="username"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
-    <div><input type="submit" value="Sign In"/></div>
-</form>
+
+<div id="username-page">
+    <div class="username-page-container">
+        <h1 class="title">输入用户名和密码</h1>
+        <form th:action="@{/login}" method="post" id="usernameForm" name="usernameForm">
+            <div class="form-group">
+                <input type="text" name="username" placeholder="姓名" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" class="form-control" placeholder="密码"/>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="accent username-submit">登&nbsp;&nbsp;录</button>
+            </div>
+        </form>
+    </div>
+</div>
 </body>
 </html>

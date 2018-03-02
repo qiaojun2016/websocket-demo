@@ -4,7 +4,7 @@
     box-sizing: border-box;
 }
 
-html,body {
+html, body {
     height: 100%;
     overflow: hidden;
 }
@@ -132,7 +132,6 @@ button.accent {
     margin-top: 10px;
 }
 
-
 #chat-page {
     position: relative;
     height: 100%;
@@ -187,12 +186,12 @@ button.accent {
     word-wrap: break-word;
 }
 
-#chat-page .chat-message ,.left{
+#chat-page .chat-message, .left {
     padding-left: 68px;
     position: relative;
 }
 
-#chat-page .chat-message ,.right{
+#chat-page .chat-message, .right {
     padding-left: 68px;
     position: relative;
     right: 10px;
@@ -255,7 +254,6 @@ button.accent {
     top: 65px;
     width: 100%;
 }
-
 
 @media screen and (max-width: 730px) {
 

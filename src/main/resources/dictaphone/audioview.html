@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style>
+        * {
+            -webkit-touch-callout: none; /*系统默认菜单被禁用*/
+            -webkit-user-select: none; /*webkit浏览器*/
+            -khtml-user-select: none; /*早期浏览器*/
+            -moz-user-select: none; /*火狐*/
+            -ms-user-select: none; /*IE10*/
+            user-select: none;
+
+            -webkit-touch-callout: none /* disables the callout */
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="myCanvas" width="142" height="142" style="background:#aaaaaa">
+    Your browser does not support the HTML5 canvas tag.
+</canvas>
+<h3 id="voice">10</h3>
+<button id="button" style="width: 100px;height: 40px">不可显示复制</button>
+<div id="log"></div>
+<script>
+
+    var button = document.getElementById("button");
+/*    button.addEventListener("click", function (e) {
+        alert("click");
+
+        e.preventDefault();
+    });*/
+    button.addEventListener("touchstart", function (e) {
+        // alert("touchstart");
+        document.querySelector("#log").innerHTML = "ontouchstart";
+        button.style.backgroundColor = "red";
+        e.preventDefault();
+    });
+    button.addEventListener("touchend", function (e) {
+        document.querySelector("#log").innerHTML = "ontouchend";
+        button.style.backgroundColor = "white";
+       // button.onclick(e);
+    })
+
+
+    var level = document.getElementById("voice");
+    var c = document.getElementById("myCanvas");
+    var ctx = c.getContext("2d");
+    img = new Image();
+    //当图片加载完毕的时候在drawImage,否则可能图片还没有加载完毕
+    //当然画不上去喽，这就和浏览器的性能有关了。
+    img.onload = function () {
+        ctx.drawImage(img, 0, 0);
+        var timer = window.setInterval("timego()", 300);
+    }
+    img.src = 'voice.png';
+
+
+    /**
+     *
+     * @param ctx canvas 上下文
+     * @param breakValue 声音强度
+     */
+    function draw(ctx, breakValue) {
+        var lineCount = 0; // 线条数量
+        var height = 142;
+        var width = 50;
+        var paddingBottom = 25;
+        var paddingTop = 22;
+        var paddingRight = 8;
+        var lineHeight = 6;
+        lineCount = (height - paddingBottom - paddingTop) / lineHeight;
+        var startX = 0;
+        var startY = paddingTop;
+        var endX = width - paddingRight;
+        var diffX = width / (lineCount / 2 + 1);
+        lineCount = lineCount / 2 + 1;
+        var i = 0;
+        ctx.fillStyle = 'white';
+        for (i = 0; i < lineCount; i++) {
+            console.log("i = " + i);
+            console.log("breakValue = " + breakValue);
+            ctx.clearRect(startX, startY, endX - startX + 1, lineHeight)
+            if (i >= breakValue - 1) {
+                ctx.fillRect(startX, startY, endX - startX, lineHeight);
+            }
+            startY += lineHeight * 2;
+            endX -= diffX;
+            if (startY + paddingBottom >= height) break;
+        }
+    }
+
+    // 测试
+    var breakVal = -1;
+
+    // 需要 不断 重绘的时候
+    function timego() {
+        breakVal += 1;
+        ctx.save();
+        ctx.translate(93, 0);
+        draw(ctx, 8 - breakVal % 8);
+        level.innerHTML = "声音强度:" + (8 - breakVal % 8);
+        ctx.restore();
+    }
+</script>
+
+
+</body>
+</html>
