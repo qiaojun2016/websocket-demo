@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<audio controls id="audio">
+    <source src="audio.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+    <script src="js/jquery-1.8.3.min.js"></script>
+</audio>
+<script>
+    var dogBarkingBuffer = null;
+    // Fix up prefixing
+    window.AudioContext = window.AudioContext || window.webkitAudioContext;
+    var context = new AudioContext();
+
+    function loadDogSound(url) {
+        var request = new XMLHttpRequest();
+        request.open('GET', url, true);
+        request.responseType = 'arraybuffer';
+        console.log("1");
+        // Decode asynchronously
+        request.onload = function () {
+            console.log("2");
+            context.decodeAudioData(request.response, function (buffer) {
+                dogBarkingBuffer = buffer;
+                console.log(dogBarkingBuffer.length);
+                // playSound(dogBarkingBuffer);
+            }, onError);
+        }
+        request.send();
+    }
+
+    loadDogSound("https://localhost:8443/audio.mp3");
+
+    function onError() {
+        console.log("4");
+    }
+
+    function playSound(buffer) {
+        var source = context.createBufferSource(); // creates a sound source
+        source.buffer = buffer;                    // tell the source which sound to play
+        source.connect(context.destination);// connect the source to the context's destination (the speakers)
+        source.start(0);                           // play the source now
+                                                   // note: on older systems, may have to use deprecated noteOn(time);
+    }
+
+    //
+    function b64DecodeUnicode(str) {
+        // Going backwards: from bytestream, to percent-encoding, to original string.
+
+        var tmp = atob(str)
+
+
+        return tmp;
+    }
+
+    function b64EncodeUnicode(str) {
+        // first we use encodeURIComponent to get percent-encoded UTF-8,
+        // then we convert the percent encodings into raw bytes which
+        // can be fed into btoa.
+        return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+            function toSolidBytes(match, p1) {
+                return String.fromCharCode('0x' + p1);
+            }));
+    }
+
+    var encoded = b64EncodeUnicode("qiaojun");
+    alert(encoded);
+    var decoded = b64DecodeUnicode(encoded);
+    alert(decoded);
+
+    var json = {
+        "txtData": "你好"
+    };
+
+    $.ajax({
+        type: "POST",
+        url: "https://51icare.com:8000/DemoService/PostTxt",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(json),
+        dataType: "json",
+        success: function (message) {
+            var buffer = _base64ToArrayBuffer(message);
+            context.decodeAudioData(buffer, function (ss) {
+                playSound(ss);
+            }, onError);
+
+        },
+        error: function (message) {
+            alert(message);
+        }
+    });
+
+    function _base64ToArrayBuffer(base64) {
+        var binary_string = window.atob(base64);
+        var len = binary_string.length;
+        var bytes = new Uint8Array(len);
+        for (var i = 0; i < len; i++) {
+            bytes[i] = binary_string.charCodeAt(i);
+        }
+        return bytes.buffer;
+    }
+
+</script>
+</body>
+</html>

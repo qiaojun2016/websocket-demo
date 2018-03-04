@@ -16,8 +16,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         auth
                 .inMemoryAuthentication()
-                .withUser("qiaojun").password("521125cxin").roles("USER");
-        auth.inMemoryAuthentication().withUser("chen").password("123").roles("USER");
+                .withUser("qiaojun").password("521125cxin").roles("USER")
+                .and()
+                .withUser("admin").password("admin").roles("ACTUATOR")
+                .and()
+                .withUser("chen").password("123").roles("USER");
     }
 
     @Override
@@ -29,7 +32,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/login").permitAll()
-                .antMatchers("resources/**").permitAll()
                 .anyRequest().fullyAuthenticated()
                 .anyRequest().authenticated()
                 .and()
@@ -45,7 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity security) {
-        security.ignoring().antMatchers("/css/**", "/images/**", "/js/**");
+        security.ignoring().antMatchers("/css/**", "/images/**", "/js/**", "/log", "/test/**");
     }
 
 }

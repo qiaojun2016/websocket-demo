@@ -43,9 +43,7 @@ public class ChatController {
         message.setSender("小智");
         message.setContent("我了解了");
         message.setType(ChatMessage.MessageType.CHAT);
-
         System.out.println(principal.getName());
-
         messagingTemplate.convertAndSendToUser(message.getSender(), "/queue/reply", message);
         return message;
     }
