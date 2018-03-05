@@ -12,26 +12,51 @@
             -ms-user-select: none; /*IE10*/
             user-select: none;
 
-            -webkit-touch-callout: none /* disables the callout */
+            -webkit-touch-callout: none; /* disables the callout */
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        button {
+            box-shadow: none;
+            border: 1px solid transparent;
+            font-size: 14px;
+            outline: none;
+            line-height: 100%;
+            white-space: nowrap;
+            vertical-align: middle;
+            padding: 0.6rem 1rem;
+            border-radius: 2px;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            background-color: #e8e8e8;
+            min-height: 38px;
+        }
+
+        #canvasDiv {
+            width: 142px;
+            height: 142px;
+            display: inline-block;
+            background: #fff;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.44);
         }
     </style>
+    <script src="scripts/jquery-1.8.3.min.js"></script>
 </head>
 <body>
-
-<canvas id="myCanvas" width="142" height="142" style="background:#aaaaaa">
-    Your browser does not support the HTML5 canvas tag.
-</canvas>
+<div id="canvasDiv">
+    <canvas id="myCanvas" width="142" height="142" style="background:#e8e8e8;z-index: 1">
+        Your browser does not support the HTML5 canvas tag.
+    </canvas>
+</div>
 <h3 id="voice">10</h3>
-<button id="button" style="width: 100px;height: 40px">不可显示复制</button>
+<button id="button">按住 说话</button>
+<button id="button2">按住 说话</button>
 <div id="log"></div>
 <script>
 
     var button = document.getElementById("button");
-/*    button.addEventListener("click", function (e) {
-        alert("click");
-
-        e.preventDefault();
-    });*/
     button.addEventListener("touchstart", function (e) {
         // alert("touchstart");
         document.querySelector("#log").innerHTML = "ontouchstart";
@@ -40,9 +65,24 @@
     });
     button.addEventListener("touchend", function (e) {
         document.querySelector("#log").innerHTML = "ontouchend";
-        button.style.backgroundColor = "white";
-       // button.onclick(e);
-    })
+        button.style.backgroundColor = "#e8e8e8";
+        // button.onclick(e);
+    });
+
+    /*$('#button2').addEventListener("touchstart", function (ev) {
+        alert("ontouchstart");
+    });*/
+    $.ready = function () {
+        $('#button2').bind("touchstart", function (e) {
+            $(this).css('backgroundColor', "#c8c8c8");
+            $('#myCanvas').css('display', 'block');
+            e.preventDefault();
+        });
+        $('#button2').bind("touchend", function (e) {
+            $(this).css('backgroundColor', '#e8e8e8');
+            $('#myCanvas').css('display', 'none');
+        });
+    }
 
 
     var level = document.getElementById("voice");
